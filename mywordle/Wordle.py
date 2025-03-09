@@ -248,8 +248,13 @@ class Wordle:
 
         for row in self.keyboard:
             if key in row:
-                row[key] = color
-                break
+                if row[key] != self.GREEN and color == self.YELLOW:
+                    row[key] = color
+                    break
+
+                if row[key] != self.GREEN and row[key] != self.YELLOW:
+                    row[key] = color
+                    break
 
     def print_keyboard(self):
 
