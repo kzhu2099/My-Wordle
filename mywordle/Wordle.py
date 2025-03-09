@@ -31,7 +31,15 @@ class Wordle:
     list custom_guess_list, optional:
         a custom list of guesses to use that can be picked from
     '''
+
     def __init__(self, custom_word_list = None, custom_guess_list = None):
+        if custom_word_list and not custom_guess_list:
+            print('Guess list is not set while word list is set, letting any guess happen.')
+            custom_guess_list = []
+
+        elif custom_guess_list and (not custom_word_list or custom_word_list == []):
+            raise ValueError('Word list cannot be the default if you provide a guess list.')
+
         self.word_list = custom_word_list or []
         if self.word_list == []:
             with open_text('mywordle.data', 'possible_words.txt') as file:

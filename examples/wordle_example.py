@@ -12,9 +12,9 @@ if __name__ == '__main__':
     '''
     Examples of good uses
     '''
-    # game.play('words')
+    game.play('words')
 
-    # game.play() # random word
+    game.play() # random word
 
     '''
     Examples of errors

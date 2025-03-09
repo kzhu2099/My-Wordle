@@ -77,7 +77,7 @@ This game aims to mimic Wordle with thousands of available words.
 To use it is very simple! Simply run:
 
 ```python
-from mynyt import Wordle
+from mywordle import Wordle
 
 game = Wordle()
 
@@ -99,16 +99,26 @@ See examples for more information.
 
 ## Customization
 
-Wordle has many variants. One possibility for this is to change the amount of guesses or change the word length.
+Wordle has many variants, and this library's distinction is customization. You may change the amount of guesses or change the word length.
 
 You may alter ```num_guesses``` to be a different amount, like 7.
-You may set ```restrict_word = False``` to not check the length nor if it is inside the valid words.
-This lets you have words like ```magazine```, with the player being told how many characters it should be.
+You may set ```restrict_word = False```.
+This setting removes restrictions on word length or its appearance in the ```word_list```, allowing any alphabetical string as a guess.
+
+If you want to have the word ```magazine```, guessed, you may do the following:
+
+```python
+game.play('magazine', num_guesses = 7, restrict_word = False)
+```
 
 Another option is to input your own ```custom_word_list``` and/or ```custom_guess_list```.
-When there is the first, the words can be chosen from that--and they can vary in length.
-To make save you from a headache, if you pass [] for either, anything is allowed.
-This has the same functionality of restrict_word = False.
+This is sometimes preferable because it allows for a random word to be chosen while preventing a random string of characters from being the guess.
+
+If you provide a ```custom_word_list```, words will be randomly chosen from it, and they can have varying lengths.
+To save you from a headache, if you pass ```[]``` for either, any word is allowed for a target word or a guess.
+
+If you set guesses, words may not be empty.
+If you set words without setting guesses, it will default to ```[]```.
 
 For example, if you have a list of your own words that you want to use, you can have the following:
 
