@@ -95,6 +95,12 @@ To check if a word falls into either, use ```is_valid_word``` or ```is_valid_gue
 
 This means that you can guess with ```xylyl``` but it won't ever appear unless if you use ```game.play('xylyl')```.
 
+An intracacy to beware of is the color prioritization.
+On the words, it will be easy to understand.
+However, on the keyboard, if a letter has been green, it will be green, regardless if the letter is yellow elsewhere or at a different time.
+The same applies to yellow, where a different grey will not change the color.
+A white letter can change to any, a gray to yellow or green, and a yellow to green.
+
 See examples for more information.
 
 ## Customization
