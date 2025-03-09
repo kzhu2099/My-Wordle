@@ -71,7 +71,7 @@ When you guess the word, you will be given a color-coded result with the followi
 - Yellow is the correct letter but it is in a different spot
 - Gray/White means that the letter is not in the word.
 
-## Usage
+## Basic Gameplay
 
 This game aims to mimic Wordle with thousands of available words.
 To use it is very simple! Simply run:
@@ -80,45 +80,54 @@ To use it is very simple! Simply run:
 from mywordle import Wordle
 
 game = Wordle()
-
 game.play()
 ```
 
 Guesses/words are not case sensitive.
 
-You may pass in a custom word to guess for but it must be 5 letters, just like guesses.
+You may pass in a ```custom_word``` for the target, as long as it is part of ```self.word_list```, which includes words of any length.
 
-It also must be part of the ```guess_list```. This is a list of words that are valid guesses, while ```word_list``` is a list of words that are valid starting points.
-Randomly generated words are from the latter, because they are more well known. However, if you want to use a custom target, it must be part of guess_list.
+```self.word_list``` is a list of words that are starting points for the random generation.
+
+```self.guess_list``` is a list of words that players may use to guess with.
 
 To check if a word falls into either, use ```is_valid_word``` or ```is_valid_guess```
 
 This means that you can guess with ```xylyl``` but it won't ever appear unless if you use ```game.play('xylyl')```.
 
-An intracacy to beware of is the color prioritization.
-On the words, it will be easy to understand.
-On the keyboard, it prioritizes green > yellow > grey > white.
+Finally, for an extra challenge, set ```challenge_mode = True``` in ```play()``` which requires you to follow all clues given in previous words.
 
 See examples for more information on how to use the game.
 
 ## Customization
 
-Wordle has many variants, and this library's distinction is customization. You may change the amount of guesses or change the word length.
+Wordle has many variants, and this library's distinction is customization.
 
 You may alter ```num_guesses``` to be a different amount, like 7.
-You may set ```allow_custom_words = True```.
-This setting makes any alphabetic string a possible target word.
 
-For example, if you want to have the word ```magazine```, guessed, you may do the following:
+If ```custom_word``` is not in ```self.word_list```, you may set ```allow_any_word = True``` to allow any string of characters.
+
+For example, if you want to have the word ```abcdefgh```, guessed, you may do the following:
 
 ```python
-game.play('magazine', num_guesses = 7, allow_custom_words = False)
+game.play('abcdefgh', num_guesses = 7, allow_any_word = True)
 ```
 
-You can input your own ```custom_word_list``` and/or ```custom_guess_list``` to further customize the game.
+Or, if you want all 8 letter words in the default list, you may play like so:
 
-```custom_word_list```: This is a list of words from which the target word will be randomly selected. The words in this list can have varying lengths. When provided, the target word will be chosen from this list. If empty, any word can be chosen but a ```custom_word``` must be provided in ```play()```. ```custom_guess_list``` must also be an empty list if this is.
-```custom_guess_list```: If ```custom_word_list``` is provided, this must include it. Otherwise, it serves as additional words that are valid guesses to the default. If an empty list, any guess is valid.
+```python
+game = Wordle()
+game.play(word_length = 8)
+```
+
+```word_length``` pulls from ```self.word_list``` and takes a random word with the value provided.
+If ```custom_word``` is passed with this, word_length is ignored.
+
+You can input your own ```custom_word_list``` and/or ```custom_guess_list``` for most control.
+
+```custom_word_list```: This is a list of words from which the target word will be randomly selected. The words in this list can have varying lengths. When provided, ```self.words``` will be this.
+```custom_guess_list```: If ```custom_word_list``` is provided, this must include it. Otherwise, it serves as additional words that are valid guesses to the default.
+if ```custom_guess_list``` is empty, any word can be a guess. If ```custom_word_list``` is empty, both must be empty. This is equivalent of always having ```play(allow_any_word = True ... )```, but you MUST provide a ```custom_word```.
 
 For example, if you have a list of your own words that you want to use, you can have the following:
 
@@ -130,6 +139,8 @@ game.play()
 ```
 
 Because though the word lengths may be different, the word length must be given away, which can be an indicator of what the word is.
+
+You may also pass in ```word_length``` in ```play()```.
 
 Make sure that the player doesn't have access to the list or it is sufficiently large enough.
 
