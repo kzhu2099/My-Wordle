@@ -25,7 +25,7 @@ To install mywordle, use pip: ```pip install mywordle```.
 
 However, many prefer to use a virtual environment.
 
-MacOS / Linux:
+macOS / Linux:
 
 ```sh
 # make your desired directory
