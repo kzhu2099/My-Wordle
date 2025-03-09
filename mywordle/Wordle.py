@@ -28,29 +28,34 @@ class Wordle:
     list custom_word_list, optional:
         a custom list of words to use that can be picked from
 
-    list custom_guess_list, optional:
-        a custom list of guesses to use that can be picked from
+    list additional_guess_list, optional:
+        a custom list of guesses to use that can be picked from, which will be added with the custom_word_list
     '''
 
     def __init__(self, custom_word_list = None, custom_guess_list = None):
-        if custom_word_list and not custom_guess_list:
-            print('Guess list is not set while word list is set, letting any guess happen.')
-            custom_guess_list = []
+        if custom_guess_list != [] and custom_word_list == []:
+            raise ValueError('custom_word_list cannot be [] if custom_guess_list not also [].')
 
-        elif custom_guess_list and (not custom_word_list or custom_word_list == []):
-            raise ValueError('Word list cannot be the default if you provide a guess list.')
+        elif (custom_guess_list is None and custom_word_list is not None) or (custom_guess_list != [] and not all(word in custom_guess_list for word in custom_word_list)):
+            raise ValueError('If custom_word_list is provided, all valid words in custom_word_list must also be in custom_guess_list')
 
-        self.word_list = custom_word_list or []
-        if self.word_list == []:
+        self.word_list = []
+        if custom_word_list is None:
             with open_text('mywordle.data', 'possible_words.txt') as file:
                 text = file.read()
-                self.word_list = text.split('\n')
+                self.word_list = text.splitlines()
 
-        self.guess_list = custom_guess_list or []
-        if self.guess_list == []:
+        else:
+            self.word_list = custom_word_list
+
+        self.guess_list = []
+        if custom_word_list is None:
             with open_text('mywordle.data', 'possible_guesses.txt') as file:
                 text = file.read()
-                self.guess_list = text.split('\n')
+                self.guess_list = text.splitlines()
+
+        if custom_guess_list is not None:
+            self.guess_list += custom_guess_list
 
         self.word = ''
 
@@ -63,16 +68,16 @@ class Wordle:
 
         self.keyboard = {}
 
-    def play(self, custom_word = None, num_guesses = 6, restrict_word = True):
+    def play(self, custom_word = None, num_guesses = 6, allow_custom_words = False):
 
         '''
         Plays the game Wordle, with the target either being a random word or custom_word!
 
         Parameters
         ----------
-        string custom_word, optional:
-            a 5-letter word in the list of valid words to use as the target word if restrict_word is True.
-            If restrict_word is False, it must be a string without digits.
+        string custom_word, optional unless if self.word_list = []:
+            a word in the list of valid words to use as the target word if allow_custom_words is False.
+            If allow_custom_words is True, it must be a string without digits.
 
         Returns
         -------
@@ -81,9 +86,13 @@ class Wordle:
         Raises
         ------
             ValueError: if the word is not valid or if it has digits.
+            ValueError: if the a custom word is not provided and the word list is empty
         '''
 
-        if custom_word and restrict_word and not self.is_valid_guess(custom_word):
+        if not custom_word and self.word_list == []:
+            raise ValueError('Since the word list is empty, please provide a custom word.')
+
+        if custom_word and not allow_custom_words and not self.is_valid_guess(custom_word):
             raise ValueError('Invalid custom word.')
 
         elif custom_word and any(char.isdigit() for char in custom_word):
@@ -117,7 +126,7 @@ class Wordle:
                 elif any(char.isdigit() for char in guess):
                     print('Digits are not allowed, please try again.')
 
-                elif restrict_word and not self.is_valid_guess(guess):
+                elif not allow_custom_words and not self.is_valid_guess(guess):
                     print('Invalid word, please try again.')
 
                 else:

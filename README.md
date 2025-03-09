@@ -1,6 +1,6 @@
 # mywordle
 
-mywordle is a library that is simply Wordle.
+mywordle is a library that brings the Wordle game to Python with customization.
 
 Millions of people enjoy Wordle every day from the NYT.
 However, people cannot access it on Python and it is very difficult to customize.
@@ -97,49 +97,45 @@ This means that you can guess with ```xylyl``` but it won't ever appear unless i
 
 An intracacy to beware of is the color prioritization.
 On the words, it will be easy to understand.
-However, on the keyboard, if a letter has been green, it will be green, regardless if the letter is yellow elsewhere or at a different time.
-The same applies to yellow, where a different grey will not change the color.
-A white letter can change to any, a gray to yellow or green, and a yellow to green.
+On the keyboard, it prioritizes green > yellow > grey > white.
 
-See examples for more information.
+See examples for more information on how to use the game.
 
 ## Customization
 
 Wordle has many variants, and this library's distinction is customization. You may change the amount of guesses or change the word length.
 
 You may alter ```num_guesses``` to be a different amount, like 7.
-You may set ```restrict_word = False```.
-This setting removes restrictions on word length or its appearance in the ```word_list```, allowing any alphabetical string as a guess.
+You may set ```allow_custom_words = True```.
+This setting makes any alphabetic string a possible target word.
 
-If you want to have the word ```magazine```, guessed, you may do the following:
+For example, if you want to have the word ```magazine```, guessed, you may do the following:
 
 ```python
-game.play('magazine', num_guesses = 7, restrict_word = False)
+game.play('magazine', num_guesses = 7, allow_custom_words = False)
 ```
 
-Another option is to input your own ```custom_word_list``` and/or ```custom_guess_list```.
-This is sometimes preferable because it allows for a random word to be chosen while preventing a random string of characters from being the guess.
+You can input your own ```custom_word_list``` and/or ```custom_guess_list``` to further customize the game.
 
-If you provide a ```custom_word_list```, words will be randomly chosen from it, and they can have varying lengths.
-To save you from a headache, if you pass ```[]``` for either, any word is allowed for a target word or a guess.
-
-If you set guesses, words may not be empty.
-If you set words without setting guesses, it will default to ```[]```.
+```custom_word_list```: This is a list of words from which the target word will be randomly selected. The words in this list can have varying lengths. When provided, the target word will be chosen from this list. If empty, any word can be chosen but a ```custom_word``` must be provided in ```play()```. ```custom_guess_list``` must also be an empty list if this is.
+```custom_guess_list```: If ```custom_word_list``` is provided, this must include it. Otherwise, it serves as additional words that are valid guesses to the default. If an empty list, any guess is valid.
 
 For example, if you have a list of your own words that you want to use, you can have the following:
 
 ```python
-game2 = Wordle(['magazine', 'apples', 'oranges'], []) # allows any guesses after picking from this list
+game = Wordle(['magazine', 'apples', 'oranges'], []) # allows any guesses after picking from this list
+game = Wordle(['magazine', 'apples', 'oranges'], ['magazine', 'apples', 'oranges', ...]) # allows for a set guesslist that includes the word list
 
-game2.play()
+game.play()
 ```
 
-One caveat of this is that the length of the word is given away.
+Because though the word lengths may be different, the word length must be given away, which can be an indicator of what the word is.
+
 Make sure that the player doesn't have access to the list or it is sufficiently large enough.
 
 ## Disclaimer
 
-Wordle is owned by the NYT. This library provides a version of Wordle that mimics its behavior for personal and non-commercial use.
+This project is a personal and non-commercial recreation of the popular Wordle game. The Wordle game is owned and operated by The New York Times (NYT). This library is intended for personal, educational, and entertainment use only. The library mimics the behavior of the official game but does not include any of the official NYT branding, features, or content. The use of this library is strictly for non-commercial purposes. By using this library, you acknowledge that you are responsible for complying with any applicable laws regarding personal and non-commercial use. The author and contributors do not hold any rights to the Wordle name, game, or related intellectual property.
 
 ## License
 
