@@ -27,44 +27,44 @@ class Wordle:
     '''
     Parameters
     ---------
-    list custom_word_list, optional:
+    list word_list, optional:
         a custom list of words to use that can be picked from
 
     list additional_guess_list, optional:
-        a custom list of guesses to use that can be picked from, which must also include all words in custom_word_list
+        a custom list of guesses to use that can be picked from, which must also include all words in word_list
 
     Raises
     ------
-        ValueError: if custom_word_list is [] and custom_guess_list is not []
-        ValueError: not all words in custom_word_list are a part of custom_guess_list
-
+        ValueError: if word_list is [] and guess_list is not []
+        ValueError: not all words in word_list are a part of guess_list
     '''
 
-    def __init__(self, custom_word_list = None, custom_guess_list = None):
-        if custom_guess_list is not None and custom_word_list is not None:
-            if custom_guess_list != [] and custom_word_list == []:
-                raise ValueError('custom_word_list cannot be [] if custom_guess_list not also [].')
+    def __init__(self, word_list = None, guess_list = None):
+        if guess_list is not None and word_list is not None:
+            if guess_list != [] and word_list == []:
+                raise ValueError('word_list cannot be [] if guess_list not also [].')
 
-            elif (custom_guess_list is None and custom_word_list is not None) or (custom_guess_list != [] and not all(word in custom_guess_list for word in custom_word_list)):
-                raise ValueError('If custom_word_list is provided, all valid words in custom_word_list must also be in custom_guess_list')
+            elif (guess_list is None and word_list is not None) or (guess_list != [] and not all(word in guess_list for word in word_list)):
+                raise ValueError('If word_list is provided, all valid words in word_list must also be in guess_list')
 
+        self.USE_DEFAULT_WORDS = word_list is None
         self.word_list = []
-        if custom_word_list is None:
+        if word_list is None:
             with open_text('mywordle.data', 'possible_words.txt') as file:
                 text = file.read()
                 self.word_list = text.splitlines()
 
         else:
-            self.word_list = custom_word_list
+            self.word_list = word_list
 
         self.guess_list = []
-        if custom_word_list is None:
+        if word_list is None:
             with open_text('mywordle.data', 'possible_guesses.txt') as file:
                 text = file.read()
                 self.guess_list = text.splitlines()
 
-        if custom_guess_list is not None:
-            self.guess_list += custom_guess_list
+        if guess_list is not None:
+            self.guess_list += guess_list
 
         self.word = ''
 
@@ -77,14 +77,14 @@ class Wordle:
 
         self.keyboard = {}
 
-    def play(self, custom_word = None, challenge_mode = False, word_length = 5, num_guesses = 6, allow_any_word = False):
+    def play(self, target_word = None, challenge_mode = False, word_length = None, num_guesses = None, allow_any_word = False):
 
         '''
-        Plays the game Wordle, with the target either being a random word or custom_word!
+        Plays the game Wordle, with the target either being a random word or user-set target_word!
 
         Parameters
         ----------
-        string custom_word, optional unless if self.word_list = []:
+        string target_word, optional unless if self.word_list = []:
             a word in the list of valid words to use as the target word if allow_any_word is False
             If allow_any_word is True, it must be a string without digits
 
@@ -94,12 +94,13 @@ class Wordle:
 
         int word_length, defaults to 5:
             the length of the word to take from self.word_list
+            if there is a word_list, it defaults to None
 
         int num_guesses, defaults to 6:
             the amount of guesses the player has to win
 
         boolean allow_any_word, defaults to False:
-            allows any string of characters to be the custom_word, thus also allowing any string of characters to be the guess
+            allows any string of characters to be the word_list, thus also allowing any string of characters to be the guess
 
         Returns
         -------
@@ -107,35 +108,45 @@ class Wordle:
 
         Raises
         ------
-            ValueError: if custom_word is not provided while self.word_list is empty
+            ValueError: if word_list is not provided while self.word_list is empty
             ValueError: if the word is not valid or if it has digits
             ValueError: if the a custom word is not provided and the word list is empty
             ValueError: num_guesses or word_length are not positive
             ValueError: if the word_length is not found in self.word_list
         '''
 
-        if not custom_word and self.word_list == []:
+        if self.USE_DEFAULT_WORDS:
+            word_length = word_length or 5
+
+        num_guesses = num_guesses or 6
+
+        if not target_word and self.word_list == []:
             raise ValueError('Since the word list is empty, please provide a custom word')
 
-        if custom_word and not allow_any_word and not self.is_valid_guess(custom_word):
+        if target_word and not allow_any_word and not self.is_valid_guess(target_word):
             raise ValueError('Invalid custom word')
 
-        elif custom_word and any(char.isdigit() for char in custom_word):
+        elif target_word and any(char.isdigit() for char in target_word):
             raise ValueError('Custom word has digits')
 
-        if num_guesses <= 0:
+        if not num_guesses or num_guesses <= 0:
             raise ValueError('num_guesses must be positive')
 
-        if word_length <= 0:
+        if word_length and word_length <= 0:
             raise ValueError('word_length must be positive')
 
-        if not custom_word:
-            length_word_list = [word for word in self.word_list if len(word) == word_length]
-            if length_word_list == []:
-                raise ValueError('word_length is did not yield to any words')
+        if not target_word:
+            if word_length and word_length > 0:
+                new_word_list = [word for word in self.word_list if len(word) == word_length]
+                if new_word_list == []:
+                    raise ValueError(f'word_length of {word_length} did not yield to any words')
 
-        self.word = custom_word or length_word_list[random.randint(0, len(length_word_list) - 1)]
+            else:
+                new_word_list = self.word_list
+
+        self.word = target_word or new_word_list[random.randint(0, len(new_word_list) - 1)]
         self.word = self.word.upper()
+        formatted_word = self.WHITE + '\'' + ' '.join(list(self.word)) + '\'' + self.RESET
 
         self.keyboard = [
             {'Q': self.WHITE, 'W': self.WHITE, 'E': self.WHITE, 'R': self.WHITE, 'T': self.WHITE, 'Y': self.WHITE, 'U': self.WHITE, 'I': self.WHITE, 'O': self.WHITE, 'P': self.WHITE},
@@ -143,25 +154,39 @@ class Wordle:
                     {'Z': self.WHITE, 'X': self.WHITE, 'C': self.WHITE, 'V': self.WHITE, 'B': self.WHITE, 'N': self.WHITE, 'M': self.WHITE}
         ]
 
-        print(f'The word is ready! It is {len(self.word)} characters long.')
+        print('-' * 20)
+        print(f'Welcome to Wordle! The word to guess is {len(self.word)} characters long.')
+        print(f'Guess \'\\\' to give up.')
+
         guesses = []
         challenge_mode_info = []
         win = False
 
         for i in range(num_guesses):
             while True:
-                print('-' * 25)
+                print('-' * 20)
                 self.print_keyboard()
-                guess = input(f'Guess #{i + 1}: ').upper()
+
+                for j in range(len(guesses)):
+                    print(f'{j + 1}: {guesses[j]}')
+
+                guess = input(f'{i + 1}: {self.WHITE}').upper().replace(' ', '')
+
+                if guess == '\\':
+                    print(f'{self.RESET}Sorry to see you go! Thank you for playing. The word was {formatted_word}.')
+                    time.sleep(1)
+                    return False
+
+                print(self.RESET, end = '')
 
                 if len(guess) != len(self.word):
-                    print('Invalid length, please try again')
+                    print(f'Invalid length, please input a {len(self.word)} character word')
 
                 elif any(not char.isalpha() for char in guess):
                     print('Only provide a-z. Symbols, numbers, or spaces are not allowed, please try again')
 
                 elif not allow_any_word and not self.is_valid_guess(guess):
-                    print('Invalid word, please try again')
+                    print('allow_any_word is False, please provide a valid word from self.guess_list')
 
                 else:
                     if challenge_mode and not self.complete_challenge(guess, challenge_mode_info):
@@ -169,6 +194,8 @@ class Wordle:
 
                     else:
                         break
+
+                time.sleep(1)
 
             result = self.guess_word(guess)
 
@@ -179,16 +206,17 @@ class Wordle:
                 full_guess += formatted_char
                 time.sleep(0.4)
             print()
+
             guesses.append(full_guess)
             challenge_mode_info.append(zip(list(guess), list(result)))
 
             if ''.join(result) == self.GREEN * len(self.word):
                 win = True
+                time.sleep(1)
+
                 break
 
-        formatted_word = self.WHITE
-        formatted_word += ' '.join(list(self.word))
-        formatted_word += self.RESET
+            time.sleep(1)
 
         if win:
             print(f'Congratulations! The word was {formatted_word}. You got it in {i + 1} guesses!')
@@ -199,6 +227,7 @@ class Wordle:
         print('Your guesses: ')
         print('\n'.join(guesses))
 
+        time.sleep(1)
         return win
 
     def is_valid_word(self, word):
@@ -349,6 +378,10 @@ class Wordle:
 
         for row in self.keyboard:
             if key in row:
+                if color == self.GREEN:
+                    row[key] = self.GREEN
+                    break
+
                 if row[key] != self.GREEN and color == self.YELLOW:
                     row[key] = color
                     break
