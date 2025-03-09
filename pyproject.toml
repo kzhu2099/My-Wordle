@@ -7,7 +7,7 @@ name = 'mywordle'
 
 version = '1.0.0'
 
-description = 'a library that is simply WORDLE'
+description = 'a library that is simply Wordle'
 
 authors = [{name = 'Kevin Zhu'}, {email = 'kzhu2099@gmail.com'}]
 maintainers = [{name = 'Kevin Zhu'}, {email = 'kzhu2099@gmail.com'}]
