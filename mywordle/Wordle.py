@@ -20,19 +20,29 @@ class Wordle:
     - Green is the correct letter in the correct spot
     - Yellow is the correct letter but it is in a different spot
     - Gray/White means that the letter is not in the word.
-
     '''
 
-    def __init__(self):
-        self.word_list = []
-        with open_text('mynyt.data', 'possible_words.txt') as file:
-            text = file.read()
-            self.word_list = text.split('\n')
+    '''
+    Parameters
+    ---------
+    list custom_word_list, optional:
+        a custom list of words to use that can be picked from
 
-        self.guess_list = []
-        with open_text('mynyt.data', 'possible_guesses.txt') as file:
-            text = file.read()
-            self.guess_list = text.split('\n')
+    list custom_guess_list, optional:
+        a custom list of guesses to use that can be picked from
+    '''
+    def __init__(self, custom_word_list = None, custom_guess_list = None):
+        self.word_list = custom_word_list or []
+        if self.word_list == []:
+            with open_text('mywordle.data', 'possible_words.txt') as file:
+                text = file.read()
+                self.word_list = text.split('\n')
+
+        self.guess_list = custom_guess_list or []
+        if self.guess_list == []:
+            with open_text('mywordle.data', 'possible_guesses.txt') as file:
+                text = file.read()
+                self.guess_list = text.split('\n')
 
         self.word = ''
 
@@ -45,7 +55,7 @@ class Wordle:
 
         self.keyboard = {}
 
-    def play(self, num_guesses = 6, custom_word = None, restrict_word = True):
+    def play(self, custom_word = None, num_guesses = 6, restrict_word = True):
 
         '''
         Plays the game Wordle, with the target either being a random word or custom_word!
@@ -53,18 +63,28 @@ class Wordle:
         Parameters
         ----------
         string custom_word, optional:
-            a 5-letter word in the list of vaid words to use as the target word. If it is not valid, defaults to a random word.
+            a 5-letter word in the list of valid words to use as the target word if restrict_word is True.
+            If restrict_word is False, it must be a string without digits.
 
         Returns
         -------
             A boolean of whether or not the player won.
+
+        Raises
+        ------
+            ValueError: if the word is not valid or if it has digits.
         '''
 
         if custom_word and restrict_word and not self.is_valid_guess(custom_word):
-            print('Invalid custom word, using a default one instead.')
-            custom_word = None
+            raise ValueError('Invalid custom word.')
 
-        self.word = custom_word or self.word_list[random.randint(0, len(self.word_list))]
+        elif custom_word and any(char.isdigit() for char in custom_word):
+            raise ValueError('Custom word has digits.')
+
+        if num_guesses <= 0:
+            raise ValueError('num_guesses must be positive.')
+
+        self.word = custom_word or self.word_list[random.randint(0, len(self.word_list) - 1)]
         self.word = self.word.upper()
 
         self.keyboard = [
@@ -73,7 +93,7 @@ class Wordle:
                     {'Z': self.WHITE, 'X': self.WHITE, 'C': self.WHITE, 'V': self.WHITE, 'B': self.WHITE, 'N': self.WHITE, 'M': self.WHITE}
         ]
 
-        print('The word is ready!')
+        print(f'The word is ready! It is {len(self.word)} characters long.')
         guesses = []
         win = False
 
@@ -86,7 +106,10 @@ class Wordle:
                 if len(guess) != len(self.word):
                     print('Invalid length, please try again')
 
-                elif restrict_word and self.is_valid_guess(guess):
+                elif any(char.isdigit() for char in guess):
+                    print('Digits are not allowed, please try again.')
+
+                elif restrict_word and not self.is_valid_guess(guess):
                     print('Invalid word, please try again.')
 
                 else:
@@ -103,7 +126,7 @@ class Wordle:
             print()
             guesses.append(full_guess)
 
-            if ''.join(result) == self.GREEN * 5:
+            if ''.join(result) == self.GREEN * len(self.word):
                 win = True
                 break
 
@@ -125,7 +148,7 @@ class Wordle:
     def is_valid_word(self, word):
 
         '''
-        Determines if this word is valid (if it has 5 letters and is inside the WORD list).
+        Determines if this word is valid.
 
         Parameters
         ----------
@@ -138,11 +161,11 @@ class Wordle:
             whether or not this word is valid
         '''
 
-        return len(word) != 5 or word.lower() not in self.word_list
+        return self.word_list == [] or word.lower() in self.word_list
 
     def is_valid_guess(self, word):
         '''
-        Determines if this guess is valid (if it has 5 letters and is inside the GUESS list).
+        Determines if this guess is valid.
 
         Parameters
         ----------
@@ -155,7 +178,7 @@ class Wordle:
             whether or not this word is valid
         '''
 
-        return len(word) != 5 or word.lower() not in self.guess_list
+        return self.guess_list == [] or word.lower() in self.guess_list
 
     def guess_word(self, guess, target_word = None):
 

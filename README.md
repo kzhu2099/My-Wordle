@@ -2,7 +2,9 @@
 
 mywordle is a library that is simply Wordle.
 
-Millions of people enjoy Wordle every day from the NYT. However,
+Millions of people enjoy Wordle every day from the NYT.
+However, people cannot access it on Python and it is very difficult to customize.
+This library brings this game to Python and lets them put their own twist to it.
 
 - HomePage: https://github.com/kzhu2099/My-Wordle
 - Issues: https://github.com/kzhu2099/My-Wordle/issues
@@ -12,6 +14,10 @@ Author: Kevin Zhu
 ## Features
 
 - Allows users to play Wordle
+- Allows for wordbank customization
+- Allows for multiple lengths
+- Allows for guess amount changing
+- Has a helpful keyboard color-coder
 
 ## Installation
 
@@ -90,6 +96,30 @@ To check if a word falls into either, use ```is_valid_word``` or ```is_valid_gue
 This means that you can guess with ```xylyl``` but it won't ever appear unless if you use ```game.play('xylyl')```.
 
 See examples for more information.
+
+## Customization
+
+Wordle has many variants. One possibility for this is to change the amount of guesses or change the word length.
+
+You may alter ```num_guesses``` to be a different amount, like 7.
+You may set ```restrict_word = False``` to not check the length nor if it is inside the valid words.
+This lets you have words like ```magazine```, with the player being told how many characters it should be.
+
+Another option is to input your own ```custom_word_list``` and/or ```custom_guess_list```.
+When there is the first, the words can be chosen from that--and they can vary in length.
+To make save you from a headache, if you pass [] for either, anything is allowed.
+This has the same functionality of restrict_word = False.
+
+For example, if you have a list of your own words that you want to use, you can have the following:
+
+```python
+game2 = Wordle(['magazine', 'apples', 'oranges'], []) # allows any guesses after picking from this list
+
+game2.play()
+```
+
+One caveat of this is that the length of the word is given away.
+Make sure that the player doesn't have access to the list or it is sufficiently large enough.
 
 ## Disclaimer
 
