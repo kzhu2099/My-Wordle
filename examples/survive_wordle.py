@@ -18,13 +18,14 @@ if __name__ == '__main__':
     time.sleep(2)
 
     print(
-    '''Each round, you must guess a 5-letter word within 6 attempts.
-    When you guess the word, you will be given a color-coded result with the following key:
+'''
+Each round, you must guess a 5-letter word within 6 attempts.
+When you guess the word, you will be given a color-coded result with the following key:
 
     - Green is the correct letter in the correct spot
     - Yellow is the correct letter but it is in a different spot
     - Gray/White means that the letter is not in the word.
-    '''
+'''
     )
     time.sleep(5)
 
@@ -44,3 +45,5 @@ if __name__ == '__main__':
 
     else:
         print('Oh no, you lost!')
+
+    print('Thank you for playing!')

@@ -173,7 +173,7 @@ class Wordle:
                 guess = input(f'{i + 1}: {self.WHITE}').upper().replace(' ', '')
 
                 if guess == '\\':
-                    print(f'{self.RESET}Sorry to see you go! Thank you for playing. The word was {formatted_word}.')
+                    print(f'{self.RESET}You gave up! The word was {formatted_word}.')
                     time.sleep(1)
                     return False
 

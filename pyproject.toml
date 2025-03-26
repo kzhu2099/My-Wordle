@@ -5,7 +5,7 @@ build-backend = 'setuptools.build_meta'
 [project]
 name = 'mywordle'
 
-version = '1.1.2'
+version = '1.2.0'
 
 description = 'a library that brings Wordle to Python with exceptional customization and personlization'
 
@@ -13,7 +13,7 @@ authors = [{name = 'Kevin Zhu'}, {email = 'kzhu2099@gmail.com'}]
 maintainers = [{name = 'Kevin Zhu'}, {email = 'kzhu2099@gmail.com'}]
 
 classifiers = [
-    'Development Status :: 4 - Beta',
+    'Development Status :: 5 - Production/Stable',
 
     'Intended Audience :: Developers',
     'Intended Audience :: End Users/Desktop',
