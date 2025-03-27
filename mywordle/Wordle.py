@@ -10,6 +10,8 @@ import time
 from collections import Counter
 from importlib.resources import open_text
 
+from kzutil import GREEN, YELLOW, WHITE, GREY, RESET
+
 class Wordle:
 
     '''
@@ -67,13 +69,6 @@ class Wordle:
             self.guess_list += guess_list
 
         self.word = ''
-
-        # ANSI Colors
-        self.GREEN = '\x1B[1m\033[32m'
-        self.YELLOW = '\x1B[1m\033[33m'
-        self.WHITE = '\x1B[1m\033[37m'
-        self.GREY = '\x1B[1m\033[90m'
-        self.RESET = '\x1B[0m\033[0m'
 
         self.keyboard = {}
 
@@ -146,12 +141,12 @@ class Wordle:
 
         self.word = target_word or new_word_list[random.randint(0, len(new_word_list) - 1)]
         self.word = self.word.upper()
-        formatted_word = self.WHITE + '\'' + ' '.join(list(self.word)) + '\'' + self.RESET
+        formatted_word = WHITE + '\'' + ' '.join(list(self.word)) + '\'' + RESET
 
         self.keyboard = [
-            {'Q': self.WHITE, 'W': self.WHITE, 'E': self.WHITE, 'R': self.WHITE, 'T': self.WHITE, 'Y': self.WHITE, 'U': self.WHITE, 'I': self.WHITE, 'O': self.WHITE, 'P': self.WHITE},
-                {'A': self.WHITE, 'S': self.WHITE, 'D': self.WHITE, 'F': self.WHITE, 'G': self.WHITE, 'H': self.WHITE, 'J': self.WHITE, 'K': self.WHITE, 'L': self.WHITE},
-                    {'Z': self.WHITE, 'X': self.WHITE, 'C': self.WHITE, 'V': self.WHITE, 'B': self.WHITE, 'N': self.WHITE, 'M': self.WHITE}
+            {'Q': WHITE, 'W': WHITE, 'E': WHITE, 'R': WHITE, 'T': WHITE, 'Y': WHITE, 'U': WHITE, 'I': WHITE, 'O': WHITE, 'P': WHITE},
+                {'A': WHITE, 'S': WHITE, 'D': WHITE, 'F': WHITE, 'G': WHITE, 'H': WHITE, 'J': WHITE, 'K': WHITE, 'L': WHITE},
+                    {'Z': WHITE, 'X': WHITE, 'C': WHITE, 'V': WHITE, 'B': WHITE, 'N': WHITE, 'M': WHITE}
         ]
 
         print('-' * 20)
@@ -170,14 +165,14 @@ class Wordle:
                 for j in range(len(guesses)):
                     print(f'{j + 1}: {guesses[j]}')
 
-                guess = input(f'{i + 1}: {self.WHITE}').upper().replace(' ', '')
+                guess = input(f'{i + 1}: {WHITE}').upper().replace(' ', '')
 
                 if guess == '\\':
-                    print(f'{self.RESET}You gave up! The word was {formatted_word}.')
+                    print(f'{RESET}You gave up! The word was {formatted_word}.')
                     time.sleep(1)
                     return False
 
-                print(self.RESET, end = '')
+                print(RESET, end = '')
 
                 if len(guess) != len(self.word):
                     print(f'Invalid length, please input a {len(self.word)} character word')
@@ -201,7 +196,7 @@ class Wordle:
 
             full_guess = ''
             for char, color in zip(list(guess), list(result)):
-                formatted_char = f'{color}{char}{self.RESET} '
+                formatted_char = f'{color}{char}{RESET} '
                 print(formatted_char, end = '', flush = True)
                 full_guess += formatted_char
                 time.sleep(0.4)
@@ -210,7 +205,7 @@ class Wordle:
             guesses.append(full_guess)
             challenge_mode_info.append(zip(list(guess), list(result)))
 
-            if ''.join(result) == self.GREEN * len(self.word):
+            if ''.join(result) == GREEN * len(self.word):
                 win = True
                 time.sleep(1)
 
@@ -290,8 +285,8 @@ class Wordle:
 
         for i in range(len(word)):
             if guess_characters[i] == target_characters[i]:
-                result.append(self.GREEN)
-                self.update_keyboard(target_characters[i], self.GREEN)
+                result.append(GREEN)
+                self.update_keyboard(target_characters[i], GREEN)
                 target_characters[i] = None
 
             else:
@@ -299,13 +294,13 @@ class Wordle:
 
         for i in range(len(word)):
             if result[i] is None and guess_characters[i] in target_characters:
-                result[i] = self.YELLOW
-                self.update_keyboard(guess_characters[i], self.YELLOW)
+                result[i] = YELLOW
+                self.update_keyboard(guess_characters[i], YELLOW)
                 target_characters[target_characters.index(guess_characters[i])] = None
 
             elif result[i] is None:
-                result[i] = self.GREY
-                self.update_keyboard(guess_characters[i], self.GREY)
+                result[i] = GREY
+                self.update_keyboard(guess_characters[i], GREY)
 
         return result
 
@@ -335,13 +330,13 @@ class Wordle:
 
             # enforce green and count yellow
             for index, ((letter, color), guess_letter) in enumerate(zip(previous_guess_info, guess)):
-                if color == self.GREEN:
+                if color == GREEN:
                     if guess_letter != letter:
                         return False
 
                     guess_letter_counts[letter] -= 1
 
-                elif color == self.YELLOW:
+                elif color == YELLOW:
                     required_yellow_counts[letter] += 1
 
             # enforce yellow and grrey
@@ -350,13 +345,13 @@ class Wordle:
                     return False
 
             for index, (letter, color) in enumerate(previous_guess_info):
-                if color == self.YELLOW:
+                if color == YELLOW:
                     if letter == guess[index]:
                         return False
 
                     guess_letter_counts[letter] -= 1
 
-                elif color == self.GREY:
+                elif color == GREY:
                     if letter in guess_letter_counts.keys() and guess_letter_counts[letter] > 0:
                         return False # additional letters that have not been used and are grey may not be used
 
@@ -378,15 +373,15 @@ class Wordle:
 
         for row in self.keyboard:
             if key in row:
-                if color == self.GREEN:
-                    row[key] = self.GREEN
+                if color == GREEN:
+                    row[key] = GREEN
                     break
 
-                if row[key] != self.GREEN and color == self.YELLOW:
+                if row[key] != GREEN and color == YELLOW:
                     row[key] = color
                     break
 
-                if row[key] != self.GREEN and row[key] != self.YELLOW:
+                if row[key] != GREEN and row[key] != YELLOW:
                     row[key] = color
                     break
 
@@ -400,6 +395,6 @@ class Wordle:
         for row in self.keyboard:
             print(indent, end = '')
             for key in row.keys():
-                print(row[key] + key + self.RESET + ' ', end = '')
+                print(row[key] + key + RESET + ' ', end = '')
             print()
             indent += ' '

@@ -3,9 +3,9 @@ requires = ['setuptools', 'wheel']
 build-backend = 'setuptools.build_meta'
 
 [project]
-name = 'mywordle'
+name = 'kzutil'
 
-version = '1.2.0'
+version = '1.2.1'
 
 description = 'a library that brings Wordle to Python with exceptional customization and personlization'
 
@@ -35,7 +35,7 @@ license = {file = 'LICENSE'}
 
 requires-python = '>= 3.9'
 
-dependencies = []
+dependencies = ['kzutil']
 
 [project.urls]
 Homepage = 'https://github.com/kzhu2099/My-Wordle'
