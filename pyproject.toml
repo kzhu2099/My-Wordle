@@ -5,7 +5,7 @@ build-backend = 'setuptools.build_meta'
 [project]
 name = 'mywordle'
 
-version = '1.2.1'
+version = '1.2.2'
 
 description = 'a library that brings Wordle to Python with exceptional customization and personlization'
 
@@ -44,6 +44,8 @@ Issues = 'https://github.com/kzhu2099/My-Wordle/issues'
 [tool.setuptools.package-data]
 'mywordle.data' = ['*']
 
+[tool.setuptools.packages.find]
+include = ['mynyt', 'mynyt.*']
+
 [tool.setuptools]
-packages = ['mywordle']
 license-files = []
