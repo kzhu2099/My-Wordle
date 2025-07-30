@@ -1,1 +1,1 @@
-kzutil>=1.0.0
+kzutil
