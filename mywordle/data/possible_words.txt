@@ -12882,7 +12882,7 @@ liberty
 libido
 librarian
 libraries
-library
+package
 lice
 licence
 license

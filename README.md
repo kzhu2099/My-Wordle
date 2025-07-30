@@ -1,10 +1,10 @@
 # mywordle
 
-mywordle is a library that brings Wordle to Python with exceptional customization and personlization.
+mywordle is a package that brings Wordle to Python with exceptional customization and personlization.
 
 Millions of people enjoy Wordle every day online.
 However, people cannot access it on Python, with existing libraries not providing sufficient customization.
-This library brings this game to Python and lets them put their own twist to it.
+This package brings this game to Python and lets them put their own twist to it.
 
 - HomePage: https://github.com/kzhu2099/My-Wordle
 - Issues: https://github.com/kzhu2099/My-Wordle/issues
@@ -106,7 +106,7 @@ See examples for more information on how to use the game.
 
 ## Customization
 
-Wordle has many variants, and this library's distinction is customization.
+Wordle has many variants, and this package's distinction is customization.
 
 You may alter ```num_guesses``` to be a different amount, like 7.
 
@@ -160,7 +160,7 @@ Ensure that the player doesn't have access to the list or it is sufficiently lar
 
 ## Disclaimer
 
-This project is a personal and non-commercial recreation of the popular Wordle game. The Wordle game is owned and operated by The New York Times (NYT). This library is intended for personal, educational, and entertainment use only. The library mimics the behavior of the official game but does not include any of the official NYT branding, features, or content. The use of this library is strictly for non-commercial purposes. By using this library, you acknowledge that you are responsible for complying with any applicable laws regarding personal and non-commercial use. The author and contributors do not hold any rights to the Wordle name, game, or related intellectual property.
+This project is a personal and non-commercial recreation of the popular Wordle game. The Wordle game is owned and operated by The New York Times (NYT). This package is intended for personal, educational, and entertainment use only. The package mimics the behavior of the official game but does not include any of the official NYT branding, features, or content. The use of this package is strictly for non-commercial purposes. By using this package, you acknowledge that you are responsible for complying with any applicable laws regarding personal and non-commercial use. The author and contributors do not hold any rights to the Wordle name, game, or related intellectual property.
 
 ## License
 
