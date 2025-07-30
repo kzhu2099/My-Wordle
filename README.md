@@ -1,15 +1,15 @@
 # mywordle
 
-mywordle is a package that brings Wordle to Python with exceptional customization and personlization.
+`mywordle` is a package that brings Wordle to Python with exceptional customization and personlization.
 
-Millions of people enjoy Wordle every day online.
+Millions of people enjoy `Wordle` every day online.
 However, people cannot access it on Python, with existing libraries not providing sufficient customization.
 This package brings this game to Python and lets them put their own twist to it.
 
 - HomePage: https://github.com/kzhu2099/My-Wordle
 - Issues: https://github.com/kzhu2099/My-Wordle/issues
 
-[![PyPI Downloads](https://static.pepy.tech/badge/mywordle)](https://pepy.tech/projects/mywordle)
+[![PyPI Downloads](https://static.pepy.tech/badge/mywordle)](https://pepy.tech/projects/mywordle) ![PyPI version](https://img.shields.io/pypi/v/mywordle.svg)
 
 Author: Kevin Zhu
 
@@ -26,7 +26,7 @@ Author: Kevin Zhu
 
 ## Installation
 
-To install mywordle, use pip: ```pip install mywordle```.
+To install `mywordle`, use pip: ```pip install mywordle```.
 
 However, many prefer to use a virtual environment.
 
